@@ -24,7 +24,7 @@ function RenderComments({comments}) {
               return(
             <div key={comment.id}>
               <p>{comment.text}<br />
-                --{comment.author},
+                --{comment.author},{' '}
                 {new Intl.DateTimeFormat("en-US", {
                   year: "numeric",
                   month: "short",
