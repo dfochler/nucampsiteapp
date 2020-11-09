@@ -8,21 +8,53 @@ import {
   Media,
 } from "reactstrap";
 import { Link } from "react-router-dom";
+import { Loading } from './LoadingComponent';
+import { baseUrl } from '../shared/baseUrl';
+import { Fade, Stagger } from 'react-animation-components';
 
-function About(props) {
-  const partners = props.partners.map((partner) => {
-    return (
-      <Media tag="li" key={partner.id}>
-        <RenderPartner partner={partner} />
-      </Media>
-    );
+function PartnerList (props) {
+  const partners = props.partners.partners.map((partner) => {
+   return (
+    <Fade in key={partner.id}>
+    <Media tag="li">
+      
+          <RenderPartner partner={partner} />
+      
+    </Media>
+    </Fade>
+   
+   );
   });
+            if (props.partners.isLoading) {
+              return(
+            <Loading />
+            );
+            }
+            if (props.partners.errMess) {
+              return (
+                <div className="col">
+                <h4>{props.partners.errMess}</h4>
+                </div>
+                );
+            }
+          return(
+            <div className="col mt-4">
+                <Media list>
+                <Stagger in>
+                  {partners}
+                </Stagger>
+                </Media>
+            </div>
+      );
+}
+
+
 
   function RenderPartner({ partner }) {
     if (partner) {
       return (
         <>
-          <Media object width="150" src={partner.image} alt={partner.name} />
+          <Media object width="150" src={baseUrl + partner.image} alt={partner.name} />
           <Media body className="ml-5 mb-4">
             <Media heading>{partner.name}</Media>
             <p>{partner.description}</p>
@@ -33,6 +65,7 @@ function About(props) {
     return <div />;
   }
 
+  function About(props){   
   return (
     <div className="container">
       <div className="row">
@@ -101,10 +134,8 @@ function About(props) {
       <div className="row row-content">
         <div className="col-12">
           <h3>Community Partners</h3>
-        </div>
-        <div className="col mt-4">
-          <Media list>{partners}</Media>
-        </div>
+        </div> 
+        <PartnerList partners={props.partners}/>
       </div>
     </div>
   );
